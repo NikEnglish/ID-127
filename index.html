@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Группа ИД-127</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0c0c0c, #1a1a2e, #16213e);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .welcome-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+        }
+
+        .welcome-section.compact {
+            height: 120px;
+            flex-direction: row;
+            justify-content: center;
+            gap: 20px;
+            background: linear-gradient(135deg, rgba(12, 12, 12, 0.9), rgba(26, 26, 46, 0.9));
+            backdrop-filter: blur(10px);
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+
+        .welcome-section.compact h1 {
+            font-size: 2rem;
+            margin-bottom: 0;
+            transform: scale(0.8);
+            transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .welcome-section.compact p {
+            font-size: 1.2rem;
+            opacity: 0.7;
+            transform: scale(0.9);
+            transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .welcome-section h1 {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 0 10px;
+            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .welcome-section p {
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            opacity: 0.8;
+            padding: 0 10px;
+            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .content-section {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s;
+        }
+
+        .content-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .categories-section {
+            padding: 20px 0 50px;
+        }
+
+        .category {
+            margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+        }
+
+        .category::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.1), 
+                transparent);
+            transition: left 0.8s ease;
+        }
+
+        .category.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .category.visible::before {
+            left: 100%;
+        }
+
+        .category-header {
+            padding: 18px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.05) 0%, 
+                rgba(255, 255, 255, 0.1) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.2), 
+                transparent);
+            transition: left 0.6s ease;
+        }
+
+        .category-header:hover::before {
+            left: 100%;
+        }
+
+        .category-header:hover {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.08) 0%, 
+                rgba(255, 255, 255, 0.15) 100%);
+            transform: translateY(-2px);
+        }
+
+        .category-header.active {
+            background: linear-gradient(135deg, 
+                rgba(52, 152, 219, 0.2) 0%, 
+                rgba(41, 128, 185, 0.3) 100%);
+        }
+
+        .category-header h2 {
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            display: flex;
+            align-items: center;
+        }
+
+        .category-header .icon {
+            margin-right: 12px;
+            font-size: 1.4rem;
+            transition: transform 0.4s ease;
+        }
+
+        .category-header.active .icon {
+            transform: scale(1.2) rotate(15deg);
+        }
+
+        .toggle-icon {
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            font-size: 1.1rem;
+        }
+
+        .toggle-icon.rotated {
+            transform: rotate(180deg) scale(1.2);
+        }
+
+        .category-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            background: linear-gradient(180deg, 
+                rgba(255, 255, 255, 0.02) 0%, 
+                transparent 100%);
+        }
+
+        .category-content.active {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .students-list {
+            padding: 0 18px 18px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 12px;
+        }
+
+        .empty-message {
+            padding: 25px 18px;
+            text-align: center;
+            font-style: italic;
+            opacity: 0.7;
+            grid-column: 1 / -1;
+        }
+
+        .student-card {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.07) 0%, 
+                rgba(255, 255, 255, 0.03) 100%);
+            padding: 14px;
+            border-radius: 10px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+            transform: translateY(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .student-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.1), 
+                transparent);
+            transition: left 0.6s ease;
+        }
+
+        .student-card:hover::before {
+            left: 100%;
+        }
+
+        .student-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                rgba(255, 255, 255, 0.05) 100%);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .student-name {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: #e0e0e0;
+            line-height: 1.4;
+        }
+
+        .video-link {
+            display: inline-block;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            padding: 7px 14px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            font-size: 0.9rem;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+            transition: left 0.5s ease;
+        }
+
+        .video-link:hover::before {
+            left: 100%;
+        }
+
+        .video-link:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .no-video {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            font-style: italic;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .welcome-section.compact {
+                height: 100px;
+                gap: 15px;
+            }
+            
+            .welcome-section.compact h1 {
+                font-size: 1.5rem;
+            }
+            
+            .welcome-section.compact p {
+                font-size: 1rem;
+            }
+            
+            .categories-section {
+                padding: 15px 0 40px;
+            }
+            
+            .students-list {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                padding: 0 15px 15px;
+            }
+            
+            .category-header {
+                padding: 16px 18px;
+            }
+            
+            .category-header h2 {
+                font-size: 1.3rem;
+            }
+            
+            .category-content.active {
+                max-height: 60vh;
+            }
+            
+            .student-card {
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .welcome-section.compact {
+                flex-direction: column;
+                height: 80px;
+                gap: 5px;
+            }
+            
+            .welcome-section.compact h1 {
+                font-size: 1.3rem;
+            }
+            
+            .welcome-section.compact p {
+                font-size: 0.9rem;
+            }
+            
+            .category-header {
+                padding: 14px 16px;
+            }
+            
+            .students-list {
+                padding: 0 12px 12px;
+            }
+            
+            .student-name {
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Стили для скроллбара */
+        .category-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .category-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .category-content::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #3498db, #2980b9);
+            border-radius: 10px;
+        }
+
+        .category-content::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #2980b9, #3498db);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <section class="welcome-section" id="welcome">
+            <h1>Привет!</h1>
+            <p>Сайт группы ИД-127</p>
+        </section>
+
+        <section class="content-section" id="content">
+            <div class="categories-section" id="categories">
+                <!-- Категории будут заполнены через JavaScript -->
+            </div>
+
+            <footer class="footer">
+                <p>Группа ИД-127
+                Ещё есть бот с расписанием в телеграмме;) @ racpicaniye_bot</p>
+            </footer>
+        </section>
+    </div>
+
+    <script>
+        // Данные студентов
+        const studentsData = [
+            { name: "Архипов Кирилл Александрович", category: 0, video: 0 },
+            { name: "Валиев Марат Ренатович", category: 0, video: 0 },
+            { name: "Вахмянина Дарья Александровна", category: 0, video: 0 },
+            { name: "Гайнулина Карина Маратовна", category: 0, video: 0 },
+            { name: "Жуков Матвей Вадимович", category: , video: 0 },
+            { name: "Золотов Лев Олегович", category: 0, video:  },
+            { name: "Иванов Дмитрий Станиславович", category: 0, video: 0 },
+            { name: "Конышев Сергей Павлович", category: 0, video: 0 },
+            { name: "Крылов Трофим Андреевич", category: 0, video: 0 },
+            { name: "Кузнецова Александра Николаевна", category: 0, video: 0 },
+            { name: "Леднев Данил Алексеевич", category: /, video: 0 },
+            { name: "Медведев Максим Денисович", category: 0, video: 0 },
+            { name: "Морозова Анастасия Александровна", category: 0, video: 0 },
+            { name: "Мяконьких Валерия Денисовна", category: , video: 0 },
+            { name: "Плешков Никита Андреевич", category: 0, video: 0 },
+            { name: "Саттаров Ратмир Риянович", category: 0, video: 0 },
+            { name: "Ситдиков Денис Рудамильевич", category: 0, video: 0 },
+            { name: "Тернов Валерий Алексеевич", category: Х, video: 0 },
+            { name: "Филлипов Артём Ильич", category: 0, video: 0 },
+            { name: "Хозяинов Никита Алексеевич", category: 0, video: 0 },
+            { name: "Цедилкин Данила Сергеевич", category: 0, video: 0 },
+            { name: "Чернышев Савелий Александрович", category: 0, video: 0 },
+            { name: "Шония Алексей Гивиевич", category: 0, video: 0 },
+            { name: "Шулина Дарья Андреевна", category: 0, video: 0 },
+            { name: "Яковлев Кирилл Александрович", category: 0, video: 0 }
+        ];
+
+        // Категории
+        const categories = [
+            { id: 1, name: "Октаэдр", icon: "🔺" },
+            { id: 2, name: "Додэкаэдр", icon: "⬡" },
+            { id: 3, name: "Икосаэдр", icon: "🔷" },
+            { id: 0, name: "Сам делал(а)/Не скинул(а)", icon: "❓" }
+        ];
+
+        // Переменная для отслеживания открытой категории
+        let openCategoryIndex = null;
+
+        // Функция для создания HTML студента
+        function createStudentHTML(student, index) {
+            const hasVideo = student.video > 0;
+            const videoHTML = hasVideo 
+                ? `<a href="videos/${student.video}.mp4" class="video-link" target="_blank">Смотреть видео</a>`
+                : `<span class="no-video">Видео не загружено</span>`;
+            
+            return `
+                <div class="student-card" style="animation-delay: ${index * 0.1}s">
+                    <div class="student-name">${student.name}</div>
+                    ${videoHTML}
+                </div>
+            `;
+        }
+
+        // Функция для создания HTML категории
+        function createCategoryHTML(category, index) {
+            const studentsInCategory = studentsData.filter(student => student.category === category.id);
+            const isEmpty = studentsInCategory.length === 0;
+            
+            const studentsHTML = isEmpty 
+                ? `<div class="empty-message">Тут никого нет</div>`
+                : studentsInCategory.map((student, i) => createStudentHTML(student, i)).join('');
+            
+            return `
+                <div class="category" style="transition-delay: ${index * 0.1}s">
+                    <div class="category-header" onclick="toggleCategory(${index})">
+                        <h2><span class="icon">${category.icon}</span>${category.name}</h2>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="category-content" id="category-${index}">
+                        <div class="students-list">
+                            ${studentsHTML}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Функция для переключения категории
+        function toggleCategory(index) {
+            const content = document.getElementById(`category-${index}`);
+            const header = document.querySelectorAll('.category-header')[index];
+            const toggleIcon = document.querySelectorAll('.toggle-icon')[index];
+            
+            // Закрываем предыдущую открытую категорию
+            if (openCategoryIndex !== null && openCategoryIndex !== index) {
+                const prevContent = document.getElementById(`category-${openCategoryIndex}`);
+                const prevHeader = document.querySelectorAll('.category-header')[openCategoryIndex];
+                const prevToggleIcon = document.querySelectorAll('.toggle-icon')[openCategoryIndex];
+                
+                prevContent.classList.remove('active');
+                prevHeader.classList.remove('active');
+                prevToggleIcon.classList.remove('rotated');
+            }
+            
+            // Переключаем текущую категорию
+            content.classList.toggle('active');
+            header.classList.toggle('active');
+            toggleIcon.classList.toggle('rotated');
+            
+            // Обновляем индекс открытой категории
+            if (content.classList.contains('active')) {
+                openCategoryIndex = index;
+                
+                // Анимация появления карточек студентов
+                const cards = content.querySelectorAll('.student-card');
+                cards.forEach((card, i) => {
+                    card.style.animationDelay = `${i * 0.1}s`;
+                });
+            } else {
+                openCategoryIndex = null;
+            }
+        }
+
+        // Инициализация страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Создание категорий
+            const categoriesSection = document.getElementById('categories');
+            categoriesSection.innerHTML = categories.map((category, index) => 
+                createCategoryHTML(category, index)
+            ).join('');
+            
+            // Анимация приветственного сообщения
+            setTimeout(() => {
+                const welcomeSection = document.getElementById('welcome');
+                welcomeSection.classList.add('compact');
+                
+                // Показываем основной контент после анимации приветствия
+                setTimeout(() => {
+                    const contentSection = document.getElementById('content');
+                    contentSection.classList.add('visible');
+                    
+                    // Анимация появления категорий одна за другой
+                    const categoryElements = document.querySelectorAll('.category');
+                    categoryElements.forEach((category, index) => {
+                        setTimeout(() => {
+                            category.classList.add('visible');
+                        }, index * 100 + 300);
+                    });
+                }, 600);
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
