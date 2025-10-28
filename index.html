@@ -32,35 +32,19 @@
             align-items: center;
             height: 100vh;
             text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #0c0c0c, #1a1a2e, #16213e);
+            z-index: 100;
             transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            position: relative;
         }
 
-        .welcome-section.compact {
-            height: 120px;
-            flex-direction: row;
-            justify-content: center;
-            gap: 20px;
-            background: linear-gradient(135deg, rgba(12, 12, 12, 0.9), rgba(26, 26, 46, 0.9));
-            backdrop-filter: blur(10px);
-            border-radius: 0 0 20px 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            margin-bottom: 30px;
-            padding: 0 20px;
-        }
-
-        .welcome-section.compact h1 {
-            font-size: 2rem;
-            margin-bottom: 0;
-            transform: scale(0.8);
-            transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .welcome-section.compact p {
-            font-size: 1.2rem;
-            opacity: 0.7;
-            transform: scale(0.9);
-            transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        .welcome-section.hidden {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
         }
 
         .welcome-section h1 {
@@ -71,20 +55,20 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             padding: 0 10px;
-            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .welcome-section p {
             font-size: clamp(1.2rem, 4vw, 1.5rem);
             opacity: 0.8;
             padding: 0 10px;
-            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .content-section {
             opacity: 0;
             transform: translateY(50px);
-            transition: opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            min-height: 100vh;
+            padding-top: 40px;
         }
 
         .content-section.visible {
@@ -107,30 +91,11 @@
             opacity: 0;
             transform: translateY(30px);
             transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            position: relative;
-        }
-
-        .category::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.1), 
-                transparent);
-            transition: left 0.8s ease;
         }
 
         .category.visible {
             opacity: 1;
             transform: translateY(0);
-        }
-
-        .category.visible::before {
-            left: 100%;
         }
 
         .category-header {
@@ -145,26 +110,6 @@
             background: linear-gradient(135deg, 
                 rgba(255, 255, 255, 0.05) 0%, 
                 rgba(255, 255, 255, 0.1) 100%);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .category-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.2), 
-                transparent);
-            transition: left 0.6s ease;
-        }
-
-        .category-header:hover::before {
-            left: 100%;
         }
 
         .category-header:hover {
@@ -189,11 +134,6 @@
         .category-header .icon {
             margin-right: 12px;
             font-size: 1.4rem;
-            transition: transform 0.4s ease;
-        }
-
-        .category-header.active .icon {
-            transform: scale(1.2) rotate(15deg);
         }
 
         .toggle-icon {
@@ -209,9 +149,6 @@
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            background: linear-gradient(180deg, 
-                rgba(255, 255, 255, 0.02) 0%, 
-                transparent 100%);
         }
 
         .category-content.active {
@@ -245,26 +182,6 @@
             opacity: 0;
             transform: translateY(20px);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .student-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.1), 
-                transparent);
-            transition: left 0.6s ease;
-        }
-
-        .student-card:hover::before {
-            left: 100%;
         }
 
         .student-card:hover {
@@ -282,39 +199,21 @@
             line-height: 1.4;
         }
 
-        .video-link {
+        .watch-btn {
             display: inline-block;
-            background: linear-gradient(90deg, #3498db, #2980b9);
-            padding: 7px 14px;
+            background: linear-gradient(90deg, #4285F4, #34A853);
+            padding: 8px 16px;
             border-radius: 5px;
-            text-decoration: none;
             color: white;
             font-size: 0.9rem;
+            cursor: pointer;
             transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            position: relative;
-            overflow: hidden;
+            border: none;
+            text-decoration: none;
         }
 
-        .video-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.3), 
-                transparent);
-            transition: left 0.5s ease;
-        }
-
-        .video-link:hover::before {
-            left: 100%;
-        }
-
-        .video-link:hover {
+        .watch-btn:hover {
             transform: translateY(-2px) scale(1.05);
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
         }
@@ -341,27 +240,10 @@
             font-size: 0.9rem;
         }
 
-        /* Адаптивность для мобильных устройств */
+        /* Адаптивность */
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
-            }
-            
-            .welcome-section.compact {
-                height: 100px;
-                gap: 15px;
-            }
-            
-            .welcome-section.compact h1 {
-                font-size: 1.5rem;
-            }
-            
-            .welcome-section.compact p {
-                font-size: 1rem;
-            }
-            
-            .categories-section {
-                padding: 15px 0 40px;
             }
             
             .students-list {
@@ -374,68 +256,9 @@
                 padding: 16px 18px;
             }
             
-            .category-header h2 {
-                font-size: 1.3rem;
-            }
-            
             .category-content.active {
                 max-height: 60vh;
             }
-            
-            .student-card {
-                padding: 12px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 10px;
-            }
-            
-            .welcome-section.compact {
-                flex-direction: column;
-                height: 80px;
-                gap: 5px;
-            }
-            
-            .welcome-section.compact h1 {
-                font-size: 1.3rem;
-            }
-            
-            .welcome-section.compact p {
-                font-size: 0.9rem;
-            }
-            
-            .category-header {
-                padding: 14px 16px;
-            }
-            
-            .students-list {
-                padding: 0 12px 12px;
-            }
-            
-            .student-name {
-                font-size: 0.95rem;
-            }
-        }
-
-        /* Стили для скроллбара */
-        .category-content::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .category-content::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-        }
-
-        .category-content::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #3498db, #2980b9);
-            border-radius: 10px;
-        }
-
-        .category-content::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg, #2980b9, #3498db);
         }
     </style>
 </head>
@@ -452,7 +275,7 @@
             </div>
 
             <footer class="footer">
-                <p>Группа ИД-127 Ещё есть бот  с расписанием;) @racpicaniye_bot</p>
+                <p>Группа ИД-127 © 2023 | Бот с расписанием: @racpicaniye_bot</p>
             </footer>
         </section>
     </div>
@@ -474,7 +297,7 @@
             { name: "Медведев Максим Денисович", category: 1, video: 4 },
             { name: "Морозова Анастасия Александровна", category: 1, video: 5 },
             { name: "Мяконьких Валерия Денисовна", category: 0, video: 0 },
-            { name: "Плешков Никита Андреевич", category: 2, video: 6 },
+            { name: "Плешков Никита Андреевич", category: 1, video: 6 },
             { name: "Саттаров Ратмир Риянович", category: 0, video: 0 },
             { name: "Ситдиков Денис Рудамильевич", category: 1, video: 7 },
             { name: "Тернов Валерий Алексеевич", category: 0, video: 0 },
@@ -495,15 +318,49 @@
             { id: 0, name: "Сам делал(а)/Не скинул(а)", icon: "❓" }
         ];
 
-        // Переменная для отслеживания открытой категории
+        // МАССИВ ССЫЛОК НА ВИДЕО
+        const videoLinks = {
+            1: "https://drive.google.com/file/d/1kKUzkXfwhAqhBOnlt2tS3ruOjiwLAAd-/view?usp=drivesdk",
+            2: "https://drive.google.com/file/d/1xPBwSLi9ZD2UM1jusILxhnMT3FeQI289/view?usp=drivesdk",
+            3: "https://drive.google.com/file/d/1cAi-3Q_JwUXRWryGO0XBJQTH6lwdnBTT/view?usp=drivesdk",
+            4: "https://drive.google.com/file/d/1cV7T3BY3HarUPjg6m0QHzSh2XigvB7XA/view?usp=drivesdk",
+            5: "https://drive.google.com/file/d/1ytcnEaypa8dq0Hnurea1TTer7cp85bpB/view?usp=drivesdk",
+            6: "https://drive.google.com/file/d/1VY1MSy7f--WFC5Fe8hJf3PBk6SaGUtJX/view?usp=drivesdk",
+            7: "https://drive.google.com/file/d/1se2dMBlH14wd5mU0Pfo1Mtvebc8HZ-nj/view?usp=drivesdk",
+            8: "https://drive.google.com/file/d/1E5qw30KA0WZjifgcmG0zboCykh-jeTs1/view?usp=drivesdk",
+            9: "https://drive.google.com/file/d/1PNPB1aGMsrtLdeb8pRmgeuadOPIhrUKM/view?usp=drivesdk",
+            10: "", 11: "", 12: "", 13: "", 14: "", 15: "",
+            16: "", 17: "", 18: "", 19: "", 20: "",
+            21: "", 22: "", 23: "", 24: "", 25: ""
+        };
+
         let openCategoryIndex = null;
+
+        // Функция для открытия видео
+        function openVideo(videoNumber, studentName) {
+            const videoUrl = videoLinks[videoNumber];
+            if (!videoUrl) {
+                alert(`Видео ${videoNumber} не настроено!`);
+                return;
+            }
+            
+            // Открываем в новом окне/вкладке
+            window.open(videoUrl, '_blank', 'width=1000,height=600');
+        }
 
         // Функция для создания HTML студента
         function createStudentHTML(student, index) {
             const hasVideo = student.video > 0;
-            const videoHTML = hasVideo 
-                ? `<a href="videos/${student.video}.mp4" class="video-link" target="_blank">Смотреть видео</a>`
-                : `<span class="no-video">Видео не загружено</span>`;
+            let videoHTML = '';
+            
+            if (hasVideo) {
+                const hasLink = videoLinks[student.video] && videoLinks[student.video] !== "";
+                videoHTML = `<button class="watch-btn" onclick="openVideo(${student.video}, '${student.name}')">
+                    Смотреть видео ${student.video}
+                </button>`;
+            } else {
+                videoHTML = `<span class="no-video">Видео не загружено</span>`;
+            }
             
             return `
                 <div class="student-card" style="animation-delay: ${index * 0.1}s">
@@ -543,7 +400,6 @@
             const header = document.querySelectorAll('.category-header')[index];
             const toggleIcon = document.querySelectorAll('.toggle-icon')[index];
             
-            // Закрываем предыдущую открытую категорию
             if (openCategoryIndex !== null && openCategoryIndex !== index) {
                 const prevContent = document.getElementById(`category-${openCategoryIndex}`);
                 const prevHeader = document.querySelectorAll('.category-header')[openCategoryIndex];
@@ -554,16 +410,12 @@
                 prevToggleIcon.classList.remove('rotated');
             }
             
-            // Переключаем текущую категорию
             content.classList.toggle('active');
             header.classList.toggle('active');
             toggleIcon.classList.toggle('rotated');
             
-            // Обновляем индекс открытой категории
             if (content.classList.contains('active')) {
                 openCategoryIndex = index;
-                
-                // Анимация появления карточек студентов
                 const cards = content.querySelectorAll('.student-card');
                 cards.forEach((card, i) => {
                     card.style.animationDelay = `${i * 0.1}s`;
@@ -584,21 +436,27 @@
             // Анимация приветственного сообщения
             setTimeout(() => {
                 const welcomeSection = document.getElementById('welcome');
-                welcomeSection.classList.add('compact');
+                welcomeSection.classList.add('hidden');
                 
-                // Показываем основной контент после анимации приветствия
+                // Показываем основной контент
                 setTimeout(() => {
                     const contentSection = document.getElementById('content');
                     contentSection.classList.add('visible');
                     
-                    // Анимация появления категорий одна за другой
+                    // Анимация появления категорий
                     const categoryElements = document.querySelectorAll('.category');
                     categoryElements.forEach((category, index) => {
                         setTimeout(() => {
                             category.classList.add('visible');
                         }, index * 100 + 300);
                     });
-                }, 600);
+
+                    // Автоматически открываем категорию с видео
+                    setTimeout(() => {
+                        toggleCategory(1);
+                    }, 1500);
+
+                }, 500);
             }, 2000);
         });
     </script>
